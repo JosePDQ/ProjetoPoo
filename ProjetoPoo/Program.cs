@@ -6,7 +6,7 @@ namespace ProjetoPoo
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Primeiro");
+            Console.WriteLine("Aleluia");
         }
     }
 }
