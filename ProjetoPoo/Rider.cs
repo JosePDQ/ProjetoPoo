@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ProjetoPoo
-{
-    class Rider : Pessoa
+
+    public class Rider : Pessoa
     {
         public float peso;
-        public Rider(int id, string nome, int equipa,float peso) : base(id, nome, equipa)
+        public Rider(int id, string nome,float peso) : base(id, nome)
         {
             this.peso = peso;
         }
     }
-}
+

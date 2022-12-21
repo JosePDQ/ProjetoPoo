@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
-namespace ProjetoPoo
+public class Equipa
 {
-    class Equipa
-    {
-        public int id;
-        public string nome;
+	public int id { get; set; }
+	public string nome { get; set; }
+	public List<Pessoa> membros { get; set; }
 
-        public Equipa(int id, string nome)
-        {
-            this.id = id;
-            this.nome = nome;
-        }
-    }
+	public Equipa()
+	{
+		membros = new List<Pessoa>();
+	}
+
+	public Equipa(int Id, string Nome, List<Pessoa> Membros)
+	{
+		this.id = Id;
+		this.nome = Nome;
+		this.membros = Membros;
+	}
 }

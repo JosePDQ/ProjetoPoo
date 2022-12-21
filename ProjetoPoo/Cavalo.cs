@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-class Cavalo : Animal
+public class Cavalo : Animal
 {
-	public int rider;
+	public Rider Rider;
 
-	public Cavalo(string nome, string raca, int velocidade, int stamina, bool saude, int dono, int valor,int rider) : base(nome,raca,velocidade,stamina,saude,dono,valor)
+	public Cavalo(int id,string nome, string raca, int velocidade, int stamina, bool saude, int dono, int valor,Rider rider) : base(id,nome,raca,velocidade,stamina,saude,dono,valor)
 	{
-		this.rider = rider;
+		this.Rider = rider;
 	}
 
 	

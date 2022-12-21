@@ -8,7 +8,7 @@ namespace ProjetoPoo
     {
         public string funcao;
 
-        public Staff(int id, string nome, int equipa, string funcao) : base(id, nome, equipa)
+        public Staff(int id, string nome, int equipa, string funcao) : base(id, nome)
         {
             this.funcao = funcao;
         }
