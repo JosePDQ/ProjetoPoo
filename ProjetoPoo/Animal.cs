@@ -1,17 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 
 public class Animal
 {
-	public int id { get; set; }
+	public int id;
 	public string nome;
 	public string raca;
 	public int velocidade;
 	public int stamina;
 	public bool saude;
-	public int dono;
-	public int valor;
-	public Animal(int Id,string nome, string raca, int velocidade, int stamina, bool saude, int dono, int valor)
+	public float valor;
+
+
+	public Animal(int Id,string nome, string raca, int velocidade, int stamina, bool saude, float valor)
 	{
 		this.id = Id;
 		this.nome = nome;
@@ -19,10 +22,8 @@ public class Animal
 		this.velocidade = velocidade;
 		this.stamina = stamina;
 		this.saude = saude;
-		this.dono = dono;
 		this.valor = valor;
-		
-
+	
 	}
 
 }

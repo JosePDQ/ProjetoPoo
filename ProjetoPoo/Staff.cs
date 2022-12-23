@@ -2,15 +2,24 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ProjetoPoo
-{
-    class Staff:Pessoa
+namespace StaffSpace {
+    public enum Funcao
     {
-        public string funcao;
-
-        public Staff(int id, string nome, int equipa, string funcao) : base(id, nome)
+        Veterinario,
+        CEO,
+        Treinador
+    }
+    public class Staff : Pessoa
+    {
+       public Funcao funcao { get; set; }
+    
+        public Staff(int id, string nome, bool trabalha,Funcao Funcao) : base(id, nome,trabalha)
         {
-            this.funcao = funcao;
+            this.id = id;
+            this.nome = nome;
+
+            this.funcao = Funcao;
         }
     }
 }
+
