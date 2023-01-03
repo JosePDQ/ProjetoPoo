@@ -30,6 +30,7 @@ namespace ProjetoPOO
                 Console.WriteLine("2 - Animais");
                 Console.WriteLine("3 - Corridas");
                 Console.WriteLine("4 - Pessoas");
+                Console.WriteLine("5 - Pistas");
                 Console.WriteLine("0 - Fechar Programa");
                 Console.Write("Escolha uma opção: ");
                 string escolha = Console.ReadLine();
@@ -49,6 +50,10 @@ namespace ProjetoPOO
                 else if (escolha == "4")
                 {
                     MenuPessoas();
+                }
+                else if (escolha == "5")
+                {
+                    MenuPistas();
                 }
                 else if (escolha == "0")
                 {
@@ -85,7 +90,7 @@ namespace ProjetoPOO
                 }
                 else if (escolha == "2")
                 {
-                    RemoverEquipas();
+                    //RemoverEquipas();
                     break;
     
                 }
@@ -238,6 +243,45 @@ namespace ProjetoPOO
                     ListarPessoas();
                     break;
                 }
+                else if (escolha == "0")
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Escolha inválida. Prime Enter para tentar novamente.");
+                    Console.ReadKey();
+                }
+            }
+        }
+        static void MenuPistas()
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("Menu de Pessoas:");
+                Console.WriteLine("1 - Adicionar uma pista");
+                Console.WriteLine("2 - Remover uma pista");
+                Console.WriteLine("3 - Ver todas as pistas");
+                Console.WriteLine("0 - Voltar ao main menu");
+                Console.Write("Escolha uma opção: ");
+                string escolha = Console.ReadLine();
+
+                if (escolha == "1")
+                {
+                    AdicionarPistas();
+                    break;
+                }
+                else if (escolha == "2")
+                {
+                    EditarPistas();
+                    break;
+                }
+                else if (escolha == "3")
+                {
+                    ListarPistas();
+                    break;
+                }  
                 else if (escolha == "0")
                 {
                     break;
@@ -433,6 +477,8 @@ namespace ProjetoPOO
             if(existeStaff == 0)
             {
                 Console.WriteLine("Não existe staff sem equipa");
+                Console.ReadKey();
+                return;
             }
 
 
@@ -464,18 +510,17 @@ namespace ProjetoPOO
                 Console.WriteLine("Id da equipa não encontrado.");
                 return;
             }
-            if (SelectedTeam.staff.Contains(staff))
+            foreach (Equipa equipaCheck in equipas)
             {
-                Console.WriteLine("O membro de staff já trabalha para esta equipa");
-                Console.ReadKey();
-                return;
-            }
-
-            if (equipas.Any(t => t.staff.Contains(staff)))
-            {
-                Console.WriteLine("O membro de staff escolhido já pretence a outra equipa");
-                Console.ReadKey();
-                return;
+                foreach (Staff staffCheck in equipaCheck.staff)
+                {
+                    if (staffCheck.id == staffId)
+                    {
+                        Console.WriteLine("O staff já tem equipa");
+                        Console.ReadKey();
+                        return;
+                    }
+                }
             }
             Equipa equipa = equipas.Find(t => t.id == teamId);
             if (equipa == null)
@@ -506,6 +551,8 @@ namespace ProjetoPOO
             if (existeRiders == 0)
             {
                 Console.WriteLine("Não existe riders sem equipa");
+                Console.ReadKey();
+                return;
             
             }
             Console.WriteLine();
@@ -528,7 +575,6 @@ namespace ProjetoPOO
             int teamId = int.Parse(Console.ReadLine());
 
             Equipa SelectedTeam = equipas.Find(e => e.id == teamId);
-            int checkTeam = 0;
             foreach (Equipa equipaCheck in equipas)
             {
                 foreach (Rider riderCheck in equipaCheck.rider)
@@ -652,7 +698,7 @@ namespace ProjetoPOO
             }
             Console.ReadKey();
         }
-        static void RemoverEquipas()
+        /*static void RemoverEquipas()
         {
             ListarEquipas();
             Console.WriteLine("Diga o id da equipa que pretende eliminar");
@@ -679,7 +725,7 @@ namespace ProjetoPOO
                 Console.WriteLine("Equipa removida com sucesso.Prima enter para continuar");
             }
             Console.ReadKey();
-        }
+        }*/
         static void ListarEquipas()
         {
             Console.Clear();
@@ -700,6 +746,43 @@ namespace ProjetoPOO
                 }
                 Console.WriteLine();Console.WriteLine();
             }
+        }
+        static void AdicionarPistas()
+        {
+            Console.Clear();
+            Console.WriteLine("Diga o nome da pista");
+            string nome = Console.ReadLine();
+            Console.WriteLine("Diga o comprimento da pista");
+            float comprimento = float.Parse(Console.ReadLine());
+
+            int id;
+            if (pistas.Count == 0)
+            {
+                id = 1;
+            }
+            else
+            {
+                id = pistas[pistas.Count - 1].id + 1;
+            }
+
+            Pista pista = new Pista(id,nome,comprimento);
+            Console.WriteLine("Pista adicionada com sucesso");
+            Console.ReadKey();
+        }
+        static void EditarPistas()
+        {
+
+        }
+        static void ListarPistas()
+        {
+            Console.Clear();
+            Console.WriteLine("Pistas de corridas");
+            foreach (Pista pista in pistas)
+            {
+                Console.WriteLine($"{pista.id}\t{pista.nome}\t{pista.comprimento}M");
+            }
+            Console.ReadKey();
+
         }
         static void AdicionarEquipas()
         {

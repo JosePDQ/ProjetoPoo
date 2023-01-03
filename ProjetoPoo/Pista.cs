@@ -2,14 +2,16 @@
 
 public class Pista
 {
+	public int id { get; set; }
 	public string nome { get; set; }
-	public int distancia { get; set; }
+	public float comprimento { get; set; }
 	public Pista()
 	{
 	}
-	public Pista(string Nome, int Distancia)
+	public Pista(int Id,string Nome, float Comprimento)
     {
+		this.id = Id;
 		this.nome = Nome;
-		this.distancia = Distancia;
+		this.comprimento = Comprimento;
     }
 }
