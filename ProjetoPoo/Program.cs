@@ -90,7 +90,7 @@ namespace ProjetoPOO
                 }
                 else if (escolha == "2")
                 {
-                    //RemoverEquipas();
+                    ListarEquipas();
                     break;
     
                 }
@@ -747,6 +747,24 @@ namespace ProjetoPOO
                 Console.WriteLine();Console.WriteLine();
             }
         }
+        /*static void RemoverPistas()
+        {
+            ListarPistas();
+            Console.WriteLine("Diga o id do cavalo que pretende eliminar");
+            int id = int.Parse(Console.ReadLine());
+            Pista SelectedPista = pistas.Find(e => e.id == id);
+            int index = pistas.FindIndex(pista => pista.id == id);
+            if (index == -1)
+            {
+                Console.WriteLine("Cavalo não foi encontrado. Prima enter para continuar");
+            }
+            else
+            {
+                pistas.RemoveAt(index);
+                Console.WriteLine("Equipa removida com sucesso.Prima enter para continuar");
+            }
+            Console.ReadKey();
+        }*/
         static void AdicionarPistas()
         {
             Console.Clear();
@@ -754,6 +772,7 @@ namespace ProjetoPOO
             string nome = Console.ReadLine();
             Console.WriteLine("Diga o comprimento da pista");
             float comprimento = float.Parse(Console.ReadLine());
+
 
             int id;
             if (pistas.Count == 0)
@@ -765,24 +784,43 @@ namespace ProjetoPOO
                 id = pistas[pistas.Count - 1].id + 1;
             }
 
-            Pista pista = new Pista(id,nome,comprimento);
-            Console.WriteLine("Pista adicionada com sucesso");
+
+            Pista NewPista = new Pista(id, nome, comprimento);
+            pistas.Add(NewPista);
+
+            Console.WriteLine("Pista adicionada com sucesso.Prima enter para continuar");
             Console.ReadKey();
         }
         static void EditarPistas()
         {
+            ListarPistas();
+            Console.Write("Diga o id da pista");
+            int id = int.Parse(Console.ReadLine());
 
+            Pista pista = pistas.Find(t => t.id == id);
+            if (pista == null)
+            {
+                Console.WriteLine("Pista com esse id não existe.");
+                return;
+            }
+
+            Console.Write("Diga o nome da pista ");
+            pista.nome = Console.ReadLine();
+
+            Console.Write("Diga o novo comprimento da pista: ");
+            pista.comprimento = float.Parse(Console.ReadLine());
+
+            Console.WriteLine("Pista editada.");
         }
         static void ListarPistas()
         {
             Console.Clear();
-            Console.WriteLine("Pistas de corridas");
+            Console.WriteLine("Pistas");
             foreach (Pista pista in pistas)
             {
-                Console.WriteLine($"{pista.id}\t{pista.nome}\t{pista.comprimento}M");
+                Console.WriteLine($"{pista.id}\t{pista.nome}\t{pista.comprimento}m");
             }
             Console.ReadKey();
-
         }
         static void AdicionarEquipas()
         {
