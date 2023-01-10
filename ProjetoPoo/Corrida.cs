@@ -1,23 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 
-public class Corrida
+namespace CorridasSpace
 {
-	public Calendario dia { get; set; }
-	public Pista pista { get; set; }
-	public List<Animal> participantes { get; set; }
-	public string tipo { get; set; }
-	public Corrida()
+	public enum TipoCorrida
 	{
-		participantes = new List<Animal>();
+		Obstáculos,
+		Sprint,
+		Maratona,
 	}
-
-	public Corrida(Calendario Dia, Pista Pista, List<Animal> Participantes, string Tipo)
+	public class Corrida
 	{
-		this.dia = Dia;
-		this.pista = Pista;
-		this.participantes = Participantes;
-		this.tipo = Tipo;
+		public Calendario data { get; set; }
+		public Pista pista { get; set; }
+		public List<Cavalo> participantes { get; set; }
+		public TipoCorrida tipo { get; set; }
+		public Corrida()
+		{
+			participantes = new List<Cavalo>();
+		}
 
+		public Corrida(Calendario Dia, Pista Pista, List<Cavalo> Participantes, TipoCorrida Tipo)
+		{
+			this.data = Dia;
+			this.pista = Pista;
+			this.participantes = Participantes;
+			this.tipo = Tipo;
+
+		}
 	}
 }

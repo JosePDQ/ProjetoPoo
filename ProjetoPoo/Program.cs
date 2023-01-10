@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using StaffSpace;
+using CorridasSpace;
+using EventosSpace;
 
 namespace ProjetoPOO
 {
@@ -17,6 +19,8 @@ namespace ProjetoPOO
         static List<Staff> staffs = new List<Staff>();
         static List<Rider> riders = new List<Rider>();
         static List<Corrida> corridas = new List<Corrida>();
+        static List<Evento> eventos = new List<Evento>();
+
         static Game games = new Game();
        
         static void Main(string[] args)
@@ -30,6 +34,61 @@ namespace ProjetoPOO
                 Console.Clear();
                 Console.WriteLine("Main Menu:");
                 Console.WriteLine("Dia Atual: " + games.DiaAtual.dia + "/" + games.DiaAtual.mes + "/" + games.DiaAtual.ano);
+                Console.WriteLine("1 - Avançar 1 dia");
+                Console.WriteLine("2 - Adicionar uma corrida");
+                Console.WriteLine("3 - Fazer um evento");
+                Console.WriteLine("4 - bla bla");
+                Console.WriteLine("5 - Adicionar Corridas");
+                Console.WriteLine("0 - Fechar Programa");
+                Console.Write("Escolha uma opção: ");
+                string escolha = Console.ReadLine();
+
+                if (escolha == "1")
+                {
+                    games.AvancarDia();
+                }
+                else if (escolha == "2")
+                {
+                    MenuAnimais();
+                }
+                else if (escolha == "3")
+                {
+                    AdicionarEventos();
+                }
+                else if (escolha == "4")
+                {
+                    ListarEventos();
+                }
+                else if (escolha == "5")
+                {
+                    MenuAdmin();
+                }
+                else if (escolha == "6")
+                {
+                    AdicionarCorridas();
+                }
+                else if (escolha == "7")
+                {
+                    ListarCorridas();
+                }
+                else if (escolha == "0")
+                {
+                    FecharPrograma();
+                }
+                else
+                {
+                    Console.WriteLine("Escolha inválida. Prime Enter para tentar novamente.");
+                    Console.ReadKey();
+                }
+            }
+        }
+        static void MenuAdmin()
+        {
+            while (true)
+            {
+
+                Console.Clear();
+                Console.WriteLine("Admin Menu:");
                 Console.WriteLine("1 - Equipas");
                 Console.WriteLine("2 - Animais");
                 Console.WriteLine("3 - Corridas");
@@ -59,13 +118,9 @@ namespace ProjetoPOO
                 {
                     MenuPistas();
                 }
-                else if (escolha == "6")
-                {
-                    games.AvancarDia();
-                }
                 else if (escolha == "0")
                 {
-                    FecharPrograma();
+                    break;
                 }
                 else
                 {
@@ -862,6 +917,189 @@ namespace ProjetoPOO
           }
           Console.ReadKey();
       }*/
+        public static Cavalo GetHorseById(List<Cavalo> cavalos,int id)
+        {
+            foreach( Cavalo cavalo in cavalos)
+            {
+                if(cavalo.id == id)
+                {
+                    return cavalo;
+                }
+         
+            }
+            return null;
+        }
+        static void AdicionarCorridas()
+        {
+            Console.Clear();
+
+            Console.WriteLine("Escolhe o tipo de corrida (Obstaculos,Sprint,Maratona):");
+            string tipoCorrida = Console.ReadLine().ToLower();
+            CorridasSpace.TipoCorrida tipo;
+            if (tipoCorrida == "obstaculos")
+            {
+                tipo = TipoCorrida.Obstáculos;
+            }
+            else if (tipoCorrida == "sprint")
+            {
+                tipo = TipoCorrida.Sprint;
+            }
+            else if (tipoCorrida == "maratona")
+            {
+                tipo = TipoCorrida.Maratona;
+            }
+            else
+            {
+                Console.WriteLine("Tipo inválido. A corrida não foi adicionada");
+                Console.ReadKey();
+                return;
+            }
+            ListarPistas();
+            Console.WriteLine("Diga a pista da corrida");
+            int trackId = int.Parse(Console.ReadLine());
+
+            var pista = pistas.FirstOrDefault(t=> t.id == trackId);
+            if (pista == null)
+            {
+                Console.WriteLine("Pista não exisste");
+                return;
+                Console.ReadKey();
+            }
+
+            Console.WriteLine("Diga a data da corrida (dd-mm-yyyy): ");
+            int dia = int.Parse(Console.ReadLine());
+            int mes = int.Parse(Console.ReadLine());
+            int ano = int.Parse(Console.ReadLine());
+            Calendario diaCorrida = new Calendario { dia = dia, mes = mes, ano = ano };
+            ListarCavalos();
+            Console.WriteLine("Diga o id dos cavalos para a corrida");
+            List<Cavalo> corridaCavalos = new List<Cavalo>();
+            while (true)
+            {
+                Console.Write("Diga o id do cavalo (0 para acabar)");
+                int horseId= int.Parse(Console.ReadLine());
+                if (horseId == 0)
+                {
+                    break;
+                }
+                Cavalo cavalo = GetHorseById(cavalos,horseId);
+
+                if (cavalo == null)
+                {
+                    Console.WriteLine("Não tem cavalo com esse id");
+                    continue;
+                }
+                corridaCavalos.Add(cavalo);
+
+                if(corridaCavalos.Count == 0)
+                {
+                    Console.WriteLine("Tens que adicionar pelo menos 1 cavalo á corrida");
+                    return;
+                }
+            }
+
+            Corrida existingRace = corridas.Find(r => r.data.dia == diaCorrida.dia && r.data.mes == diaCorrida.mes && r.data.ano == diaCorrida.ano);
+            if (existingRace != null)
+            {
+                Console.WriteLine("Já tem corrida para esse dia, marca para outro");
+                Console.ReadKey();
+                return;
+            }
+            else
+            {
+                Corrida newCorrida = new Corrida(diaCorrida,pista, corridaCavalos, tipo);
+                corridas.Add(newCorrida);
+                Console.WriteLine("Evento adicionado com sucesso!");
+            }
+            Console.ReadKey();
+        }
+        static void ListarCorridas()
+        {
+            Console.Clear();
+            foreach (Corrida corrida in corridas)
+            {
+                Console.WriteLine($"Data: {corrida.data.dia}/{corrida.data.mes}/{corrida.data.ano}");
+                Console.WriteLine($"Nome de equipa: {corrida.pista.nome}");
+                Console.WriteLine($"Tipo: {corrida.tipo}");
+
+                foreach (Cavalo cavalo in corrida.participantes)
+                {
+                    Console.WriteLine($" cavalo :{cavalo.nome} - rider:({cavalo.rider.nome})");
+                }
+               
+                Console.WriteLine(); Console.WriteLine();
+            }
+            Console.ReadKey();
+        }
+
+        static void AdicionarEventos()
+        {
+            Console.Clear();
+            Console.WriteLine("Qual é o id da tua equipa");
+            int teamId = int.Parse(Console.ReadLine());
+
+            Equipa equipa = equipas.FirstOrDefault(t => t.id == teamId);
+            if (equipa == null)
+            {
+                Console.WriteLine("Não tem equipa com esse id");
+                Console.ReadKey();
+                return;
+            }
+
+           
+            Console.WriteLine("Escolhe o tipo de evento (Treino,Descanço,Media):");
+            string tipoEvento = Console.ReadLine().ToLower();
+            EventosSpace.TipoEvento tipo;
+            if (tipoEvento == "treino")
+            {
+                tipo = TipoEvento.Treino;
+            }
+            else if (tipoEvento == "descanço")
+            {
+                tipo = TipoEvento.Descanço;
+            }
+            else if (tipoEvento == "media")
+            {
+                tipo = TipoEvento.Media;
+            }
+            else
+            {
+                Console.WriteLine("Tipo inválido. O evento não foi adicionado");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.WriteLine("Diga a data do evento (dd-mm-yyyy): ");
+            int dia = int.Parse(Console.ReadLine());
+            int mes = int.Parse(Console.ReadLine());
+            int ano = int.Parse(Console.ReadLine());
+            Calendario diaEvento = new Calendario { dia = dia, mes = mes , ano = ano};
+
+            Evento isEventExist = eventos.FirstOrDefault(e => e.teamId == teamId && e.data.dia == diaEvento.dia && e.data.mes == diaEvento.mes && e.data.ano == diaEvento.ano);
+            if (isEventExist != null)
+            {
+                Console.WriteLine("A equipa já tem evento para esse dia, marca para outro");
+                Console.ReadKey();
+                return;
+            }
+            else
+            {
+                Evento newEvent = new Evento(teamId, tipo, teamId, diaEvento);
+                eventos.Add(newEvent);
+                Console.WriteLine("Evento adicionado com sucesso!");
+            }
+            Console.ReadKey();
+        }
+        static void ListarEventos()
+        {
+            Console.Clear();
+            Console.WriteLine("Eventos");
+            foreach (Evento evento in eventos)
+            {
+                Console.WriteLine($"Tipo:{evento.tipoEvento}\tEquipa:{evento.teamId}\tDia:{evento.data.dia}/{evento.data.mes}/{evento.data.ano}");
+            }
+            Console.ReadKey();
+        }
         static void CarregarFicheiros()
         {
 
@@ -888,6 +1126,9 @@ namespace ProjetoPOO
 
             string gamesJson = File.ReadAllText("games.json");
             games = JsonConvert.DeserializeObject<Game>(gamesJson);
+
+            string eventosJson = File.ReadAllText("eventos.json");
+            eventos = JsonConvert.DeserializeObject<List<Evento>>(eventosJson);
 
 
 
@@ -918,6 +1159,9 @@ namespace ProjetoPOO
 
             string gamesJson = JsonConvert.SerializeObject(games);
             File.WriteAllText("games.json", gamesJson);
+
+            string eventosJson = JsonConvert.SerializeObject(eventos);
+            File.WriteAllText("eventos.json", eventosJson);
 
         }
         static void FecharPrograma()

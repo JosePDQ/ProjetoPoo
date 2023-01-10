@@ -20,6 +20,8 @@ public class Cavalo : Animal
 		this.rider = rider;
 	}
 
+    
+
 	
 }
 
