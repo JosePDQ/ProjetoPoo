@@ -46,7 +46,8 @@ namespace ProjetoPOO
 
                 if (escolha == "1")
                 {
-                    games.AvancarDia();
+                    AvancarDia(eventos);
+                    
                 }
                 else if (escolha == "2")
                 {
@@ -1093,15 +1094,15 @@ namespace ProjetoPOO
             {
                 if(evento.tipoEvento == TipoEvento.Descanço)
                 {
-                    Descanco();
+                    Descanco(evento);
                 }
                 if (evento.tipoEvento == TipoEvento.Treino)
                 {
-
+                    Treino(evento);
                 }
                 if (evento.tipoEvento == TipoEvento.Media)
                 {
-
+                    Media(evento);
                 }
             }
         }
@@ -1116,13 +1117,37 @@ namespace ProjetoPOO
                 c.stamina += 10;
             }
         }
-        static void Treino(Cavalo cavalo)
+        static void Treino(Evento evento)
         {
-            cavalo.velocidade += 10;
+            Equipa equi = equipas.Find(s => s.id == evento.teamId);
+            foreach (Cavalo c in equi.cavalos)
+            {
+                c.velocidade += 10;
+            }
         }
-        static void Media(Cavalo cavalo)
+        static void Media(Evento evento)
         {
-            cavalo.valor += 100000;
+            Equipa equi = equipas.Find(s => s.id == evento.teamId);
+            foreach (Cavalo c in equi.cavalos)
+            {
+                c.velocidade += 1000000;
+            }
+        }
+
+        static void AvancarDia(Evento evento)
+        {
+            games.DiaAtual.dia++;
+            if (games.DiaAtual.dia > DateTime.DaysInMonth(games.DiaAtual.ano, games.DiaAtual.mes))
+            {
+                games.DiaAtual.dia = 1;
+                games.DiaAtual.mes++;
+                if (games.DiaAtual.mes > 12)
+                {
+                    games.DiaAtual.mes = 1;
+                    games.DiaAtual.ano++;
+                }
+            }
+            VerificaEvento(evento);
         }
 
 
