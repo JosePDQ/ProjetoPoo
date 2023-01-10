@@ -946,7 +946,7 @@ namespace ProjetoPOO
             var pista = pistas.FirstOrDefault(t=> t.id == trackId);
             if (pista == null)
             {
-                Console.WriteLine("Pista não exisste");
+                Console.WriteLine("Pista não existe");
                 return;
                 Console.ReadKey();
             }
@@ -956,7 +956,14 @@ namespace ProjetoPOO
             int mes = int.Parse(Console.ReadLine());
             int ano = int.Parse(Console.ReadLine());
             Calendario diaCorrida = new Calendario { dia = dia, mes = mes, ano = ano };
+            if(diaCorrida.dia > DateTime.DaysInMonth(diaCorrida.dia, diaCorrida.mes))
+            {
+                Console.WriteLine("Data inválida");
+                Console.ReadKey();
+                return;
+            }
             ListarCavalos();
+            
             Console.WriteLine("Diga o id dos cavalos para a corrida");
             List<Cavalo> corridaCavalos = new List<Cavalo>();
             while (true)
@@ -1089,11 +1096,12 @@ namespace ProjetoPOO
 
         static void VerificaEvento(Evento evento)
         {
+
             if(games.DiaAtual == evento.data)
             {
                 if(evento.tipoEvento == TipoEvento.Descanço)
                 {
-                    Descanco();
+                    Descanco(evento);
                 }
                 if (evento.tipoEvento == TipoEvento.Treino)
                 {
