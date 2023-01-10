@@ -1156,6 +1156,7 @@ namespace ProjetoPOO
                 }
             }
             VerificaEvento(evento);
+            
         }
 
 
