@@ -1085,6 +1085,47 @@ namespace ProjetoPOO
             }
             Console.ReadKey();
         }
+
+
+        static void VerificaEvento(Evento evento)
+        {
+            if(games.DiaAtual == evento.data)
+            {
+                if(evento.tipoEvento == TipoEvento.Descanço)
+                {
+                    Descanco();
+                }
+                if (evento.tipoEvento == TipoEvento.Treino)
+                {
+
+                }
+                if (evento.tipoEvento == TipoEvento.Media)
+                {
+
+                }
+            }
+        }
+
+
+        
+        static void Descanco(Evento evento)
+        {
+            Equipa equi = equipas.Find(s => s.id == evento.teamId);
+            foreach(Cavalo c in equi.cavalos)
+            {
+                c.stamina += 10;
+            }
+        }
+        static void Treino(Cavalo cavalo)
+        {
+            cavalo.velocidade += 10;
+        }
+        static void Media(Cavalo cavalo)
+        {
+            cavalo.valor += 100000;
+        }
+
+
         static void CarregarFicheiros()
         {
 
