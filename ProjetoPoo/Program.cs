@@ -35,10 +35,11 @@ namespace ProjetoPOO
                 Console.WriteLine("Main Menu:");
                 Console.WriteLine("Dia Atual: " + games.DiaAtual.dia + "/" + games.DiaAtual.mes + "/" + games.DiaAtual.ano);
                 Console.WriteLine("1 - Avançar 1 dia");
-                Console.WriteLine("2 - Adicionar uma corrida");
-                Console.WriteLine("3 - Fazer um evento");
-                Console.WriteLine("4 - bla bla");
-                Console.WriteLine("5 - Adicionar Corridas");
+                Console.WriteLine("2 - Adicionar Evento");
+                Console.WriteLine("3 - Listar Eventos");
+                Console.WriteLine("4 - Adicionar Corridas");
+                Console.WriteLine("5 - Listar Corridas");
+                Console.WriteLine("6 - Admin Menu");
                 Console.WriteLine("0 - Fechar Programa");
                 Console.Write("Escolha uma opção: ");
                 string escolha = Console.ReadLine();
@@ -49,27 +50,23 @@ namespace ProjetoPOO
                 }
                 else if (escolha == "2")
                 {
-                    MenuAnimais();
+                    AdicionarEventos();
                 }
                 else if (escolha == "3")
                 {
-                    AdicionarEventos();
+                    ListarEventos();
                 }
                 else if (escolha == "4")
                 {
-                    ListarEventos();
+                    AdicionarCorridas();
                 }
                 else if (escolha == "5")
                 {
-                    MenuAdmin();
+                    ListarCorridas();
                 }
                 else if (escolha == "6")
                 {
-                    AdicionarCorridas();
-                }
-                else if (escolha == "7")
-                {
-                    ListarCorridas();
+                    MenuAdmin();
                 }
                 else if (escolha == "0")
                 {
@@ -94,7 +91,7 @@ namespace ProjetoPOO
                 Console.WriteLine("3 - Corridas");
                 Console.WriteLine("4 - Pessoas");
                 Console.WriteLine("5 - Pistas");
-                Console.WriteLine("0 - Fechar Programa");
+                Console.WriteLine("0 - Voltar atrás");
                 Console.Write("Escolha uma opção: ");
                 string escolha = Console.ReadLine();
 
@@ -193,10 +190,8 @@ namespace ProjetoPOO
                 Console.Clear();
                 Console.WriteLine("Menu de animais:");
                 Console.WriteLine("1 - Adicionar um cavalo");
-                Console.WriteLine("2 - Adicionar um galro");
-                Console.WriteLine("3 - Remover um cavalo");
-                Console.WriteLine("4 - Remover um galro");
-                Console.WriteLine("5 - Ver todos os animais");
+                Console.WriteLine("2 - Remover um cavalo");
+                Console.WriteLine("3 - Ver todos os animais");
                 Console.WriteLine("0 - Voltar ao main menu");
                 Console.Write("Escolha uma opção: ");
                 string escolha = Console.ReadLine();
@@ -208,20 +203,10 @@ namespace ProjetoPOO
                 }
                 else if (escolha == "2")
                 {
-                    //AdicionarGalros();
-                    break;
-                }
-                else if (escolha == "3")
-                {
                     RemoverCavalos();
                     break;
                 }
-                else if (escolha == "4")
-                {
-                    //RemoverGalros();
-                    break;
-                }
-                else if (escolha == "5")
+                else if (escolha == "3")
                 {
                     ListarCavalos();
                     break;
