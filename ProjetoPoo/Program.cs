@@ -17,6 +17,8 @@ namespace ProjetoPOO
         static List<Staff> staffs = new List<Staff>();
         static List<Rider> riders = new List<Rider>();
         static List<Corrida> corridas = new List<Corrida>();
+        static Game games = new Game();
+       
         static void Main(string[] args)
         {
 
@@ -24,8 +26,10 @@ namespace ProjetoPOO
 
             while (true)
             {
+
                 Console.Clear();
                 Console.WriteLine("Main Menu:");
+                Console.WriteLine("Dia Atual: " + games.DiaAtual.dia + "/" + games.DiaAtual.mes + "/" + games.DiaAtual.ano);
                 Console.WriteLine("1 - Equipas");
                 Console.WriteLine("2 - Animais");
                 Console.WriteLine("3 - Corridas");
@@ -54,6 +58,10 @@ namespace ProjetoPOO
                 else if (escolha == "5")
                 {
                     MenuPistas();
+                }
+                else if (escolha == "6")
+                {
+                    games.AvancarDia();
                 }
                 else if (escolha == "0")
                 {
@@ -90,7 +98,7 @@ namespace ProjetoPOO
                 }
                 else if (escolha == "2")
                 {
-                    ListarEquipas();
+                    //RemoverEquipas();
                     break;
     
                 }
@@ -261,7 +269,7 @@ namespace ProjetoPOO
                 Console.Clear();
                 Console.WriteLine("Menu de Pessoas:");
                 Console.WriteLine("1 - Adicionar uma pista");
-                Console.WriteLine("2 - Remover uma pista");
+                Console.WriteLine("2 - Editar uma pista");
                 Console.WriteLine("3 - Ver todas as pistas");
                 Console.WriteLine("0 - Voltar ao main menu");
                 Console.Write("Escolha uma opção: ");
@@ -315,16 +323,6 @@ namespace ProjetoPOO
             ListarStaffs();
             ListarRiders();
             Console.WriteLine("Prima Enter para tentar novamente.");
-            Console.ReadKey();
-        }
-        static void ListarCavalos()
-        {
-            Console.Clear();
-            Console.WriteLine("Cavalos");
-            foreach (Cavalo cavalo in cavalos)
-            {
-                Console.WriteLine($"{cavalo.id}\t{cavalo.nome}\t{cavalo.raca}\t{cavalo.velocidade}\t{cavalo.stamina}\t{cavalo.saude}\t{cavalo.valor}\t Rider:{cavalo.rider.nome}");
-            }
             Console.ReadKey();
         }
         static void RemoverPessoas()
@@ -451,156 +449,6 @@ namespace ProjetoPOO
             Console.WriteLine("Staff adicionado com sucesso.Prima enter para continuar");
             Console.ReadKey();
         }
-        static void AdicionarStaff(Staff staff, Equipa equipa)
-        {
-            equipa.staff.Add(staff);
-            staff.trabalha = true;
-        }
-        static void AdicionarRider(Rider rider, Equipa equipa)
-        {
-            equipa.rider.Add(rider);
-            rider.trabalha = true;
-        }
-        static void AdicionarStaffParaEquipa()
-        {
-            Console.Clear();
-            Console.WriteLine("Lista de Staff que não tem equipa:");
-            int existeStaff = 0;
-            foreach (Staff staffed in staffs)
-            {
-                if (staffed.trabalha == false)
-                {
-                    existeStaff = 1;
-                    Console.WriteLine($"{staffed.id}\t{staffed.nome}\t{staffed.funcao}");
-                }
-            }
-            if(existeStaff == 0)
-            {
-                Console.WriteLine("Não existe staff sem equipa");
-                Console.ReadKey();
-                return;
-            }
-
-
-
-            Console.WriteLine("Introduz o id do staff que pretendes adicionar a uma equipa");
-            int staffId = int.Parse(Console.ReadLine());
-
-            Staff staff = staffs.Find(s => s.id == staffId);
-            if (staff == null)
-            {
-                Console.WriteLine("Id do staff não encontrado.");
-                return;
-            }
-
-            
-            foreach (Equipa equipaExisting in equipas)
-            {
-                Console.WriteLine($"{equipaExisting.id}\t{equipaExisting.nome}\t");
-            }
-                Console.WriteLine("Introduz o id da equipa a que pretendes adicionar o funcionário");
-            int teamId = int.Parse(Console.ReadLine());
-
-            
-
-            Equipa SelectedTeam = equipas.Find(e => e.id == teamId);
-
-            if (SelectedTeam == null)
-            {
-                Console.WriteLine("Id da equipa não encontrado.");
-                return;
-            }
-            foreach (Equipa equipaCheck in equipas)
-            {
-                foreach (Staff staffCheck in equipaCheck.staff)
-                {
-                    if (staffCheck.id == staffId)
-                    {
-                        Console.WriteLine("O staff já tem equipa");
-                        Console.ReadKey();
-                        return;
-                    }
-                }
-            }
-            Equipa equipa = equipas.Find(t => t.id == teamId);
-            if (equipa == null)
-            {
-                Console.WriteLine("Equipa não encontrada.");
-                return;
-            }
-
-            AdicionarStaff(staff,SelectedTeam);
-            Console.WriteLine("O membro da staff foi adicionado com sucesso!.Prima enter para continuar");
-
-
-            Console.ReadKey();
-        }
-        static void AdicionarRiderParaEquipa()
-        {
-            Console.Clear();
-            Console.WriteLine("Lista de Riders que não tem equipa:");
-            int existeRiders = 0;
-            foreach (Rider rided in riders)
-            {
-                if (rided.trabalha == false)
-                {
-                    existeRiders = 1;
-                    Console.WriteLine($"{rided.id}\t{rided.nome}\t{rided.peso}");
-                }
-            }
-            if (existeRiders == 0)
-            {
-                Console.WriteLine("Não existe riders sem equipa");
-                Console.ReadKey();
-                return;
-            
-            }
-            Console.WriteLine();
-            Console.WriteLine("Introduz o id do rider que pretendes adicionar a uma equipa");
-            int riderId = int.Parse(Console.ReadLine());
-
-            Rider rider = riders.Find(s => s.id == riderId);
-            if (rider == null)
-            {
-                Console.WriteLine("Id do rider não encontrado.");
-                return;
-            }
-
-
-            foreach (Equipa equipaExisting in equipas)
-            {
-                Console.WriteLine($"{equipaExisting.id}\t{equipaExisting.nome}\t");
-            }
-            Console.WriteLine("Introduz o id da equipa a que pretendes adicionar o funcionário");
-            int teamId = int.Parse(Console.ReadLine());
-
-            Equipa SelectedTeam = equipas.Find(e => e.id == teamId);
-            foreach (Equipa equipaCheck in equipas)
-            {
-                foreach (Rider riderCheck in equipaCheck.rider)
-                {
-                    if(riderCheck.id == riderId)
-                    {
-                        Console.WriteLine("O rider já tem equipa");
-                        Console.ReadKey();
-                        return;
-                    }
-                }
-            }
-            Equipa equipa = equipas.Find(t => t.id == teamId);
-            if (equipa == null)
-            {
-                Console.WriteLine("Equipa não encontrada.");
-                return;
-            }
-
-            AdicionarRider(rider,SelectedTeam);
-            Console.WriteLine("O rider foi adicionado com sucesso!.Prima enter para continuar");
-
-           
-
-            Console.ReadKey();
-        }
         static void AdicionarCavalos()
         {
             Console.Clear();
@@ -698,7 +546,17 @@ namespace ProjetoPOO
             }
             Console.ReadKey();
         }
-        /*static void RemoverEquipas()
+        static void ListarCavalos()
+        {
+            Console.Clear();
+            Console.WriteLine("Cavalos");
+            foreach (Cavalo cavalo in cavalos)
+            {
+                Console.WriteLine($"{cavalo.id}\t{cavalo.nome}\t{cavalo.raca}\t{cavalo.velocidade}\t{cavalo.stamina}\t{cavalo.saude}\t{cavalo.valor}\t Rider:{cavalo.rider.nome}");
+            }
+            Console.ReadKey();
+        }
+       /*static void RemoverEquipas()
         {
             ListarEquipas();
             Console.WriteLine("Diga o id da equipa que pretende eliminar");
@@ -747,24 +605,188 @@ namespace ProjetoPOO
                 Console.WriteLine();Console.WriteLine();
             }
         }
-        /*static void RemoverPistas()
+        static void AdicionarEquipas()
         {
-            ListarPistas();
-            Console.WriteLine("Diga o id do cavalo que pretende eliminar");
-            int id = int.Parse(Console.ReadLine());
-            Pista SelectedPista = pistas.Find(e => e.id == id);
-            int index = pistas.FindIndex(pista => pista.id == id);
-            if (index == -1)
+            Console.Clear();
+            Console.WriteLine("Escolha o nome para a equipa");
+            string nome = Console.ReadLine();
+
+            int id;
+            if (equipas.Count == 0)
             {
-                Console.WriteLine("Cavalo não foi encontrado. Prima enter para continuar");
+                id = 1;
             }
             else
             {
-                pistas.RemoveAt(index);
-                Console.WriteLine("Equipa removida com sucesso.Prima enter para continuar");
+                id = equipas[equipas.Count - 1].id + 1;
             }
+
+
+            Equipa equipa = new Equipa()
+            {
+                id = id,
+                nome = nome,
+                staff = new List<Staff>(),
+                rider = new List<Rider>(),
+                cavalos = new List<Cavalo>(),
+                galros = new List<Galro>(),
+            };
+
+            equipas.Add(equipa);
+
+            Console.WriteLine("Equipa criada com sucesso.Prima enter para continuar");
             Console.ReadKey();
-        }*/
+        }
+        static void AdicionarStaff(Staff staff, Equipa equipa)
+        {
+            equipa.staff.Add(staff);
+            staff.trabalha = true;
+        }
+        static void AdicionarRider(Rider rider, Equipa equipa)
+        {
+            equipa.rider.Add(rider);
+            rider.trabalha = true;
+        }
+        static void AdicionarStaffParaEquipa()
+        {
+            Console.Clear();
+            Console.WriteLine("Lista de Staff que não tem equipa:");
+            int existeStaff = 0;
+            foreach (Staff staffed in staffs)
+            {
+                if (staffed.trabalha == false)
+                {
+                    existeStaff = 1;
+                    Console.WriteLine($"{staffed.id}\t{staffed.nome}\t{staffed.funcao}");
+                }
+            }
+            if (existeStaff == 0)
+            {
+                Console.WriteLine("Não existe staff sem equipa");
+                Console.ReadKey();
+                return;
+            }
+
+
+
+            Console.WriteLine("Introduz o id do staff que pretendes adicionar a uma equipa");
+            int staffId = int.Parse(Console.ReadLine());
+
+            Staff staff = staffs.Find(s => s.id == staffId);
+            if (staff == null)
+            {
+                Console.WriteLine("Id do staff não encontrado.");
+                return;
+            }
+
+
+            foreach (Equipa equipaExisting in equipas)
+            {
+                Console.WriteLine($"{equipaExisting.id}\t{equipaExisting.nome}\t");
+            }
+            Console.WriteLine("Introduz o id da equipa a que pretendes adicionar o funcionário");
+            int teamId = int.Parse(Console.ReadLine());
+
+
+
+            Equipa SelectedTeam = equipas.Find(e => e.id == teamId);
+
+            if (SelectedTeam == null)
+            {
+                Console.WriteLine("Id da equipa não encontrado.");
+                return;
+            }
+            foreach (Equipa equipaCheck in equipas)
+            {
+                foreach (Staff staffCheck in equipaCheck.staff)
+                {
+                    if (staffCheck.id == staffId)
+                    {
+                        Console.WriteLine("O staff já tem equipa");
+                        Console.ReadKey();
+                        return;
+                    }
+                }
+            }
+            Equipa equipa = equipas.Find(t => t.id == teamId);
+            if (equipa == null)
+            {
+                Console.WriteLine("Equipa não encontrada.");
+                return;
+            }
+
+            AdicionarStaff(staff, SelectedTeam);
+            Console.WriteLine("O membro da staff foi adicionado com sucesso!.Prima enter para continuar");
+
+
+            Console.ReadKey();
+        }
+        static void AdicionarRiderParaEquipa()
+        {
+            Console.Clear();
+            Console.WriteLine("Lista de Riders que não tem equipa:");
+            int existeRiders = 0;
+            foreach (Rider rided in riders)
+            {
+                if (rided.trabalha == false)
+                {
+                    existeRiders = 1;
+                    Console.WriteLine($"{rided.id}\t{rided.nome}\t{rided.peso}");
+                }
+            }
+            if (existeRiders == 0)
+            {
+                Console.WriteLine("Não existe riders sem equipa");
+                Console.ReadKey();
+                return;
+
+            }
+            Console.WriteLine();
+            Console.WriteLine("Introduz o id do rider que pretendes adicionar a uma equipa");
+            int riderId = int.Parse(Console.ReadLine());
+
+            Rider rider = riders.Find(s => s.id == riderId);
+            if (rider == null)
+            {
+                Console.WriteLine("Id do rider não encontrado.");
+                return;
+            }
+
+
+            foreach (Equipa equipaExisting in equipas)
+            {
+                Console.WriteLine($"{equipaExisting.id}\t{equipaExisting.nome}\t");
+            }
+            Console.WriteLine("Introduz o id da equipa a que pretendes adicionar o funcionário");
+            int teamId = int.Parse(Console.ReadLine());
+
+            Equipa SelectedTeam = equipas.Find(e => e.id == teamId);
+            foreach (Equipa equipaCheck in equipas)
+            {
+                foreach (Rider riderCheck in equipaCheck.rider)
+                {
+                    if (riderCheck.id == riderId)
+                    {
+                        Console.WriteLine("O rider já tem equipa");
+                        Console.ReadKey();
+                        return;
+                    }
+                }
+            }
+            Equipa equipa = equipas.Find(t => t.id == teamId);
+            if (equipa == null)
+            {
+                Console.WriteLine("Equipa não encontrada.");
+                return;
+            }
+
+            AdicionarRider(rider, SelectedTeam);
+            Console.WriteLine("O rider foi adicionado com sucesso!.Prima enter para continuar");
+
+
+
+            Console.ReadKey();
+        }
         static void AdicionarPistas()
         {
             Console.Clear();
@@ -822,38 +844,24 @@ namespace ProjetoPOO
             }
             Console.ReadKey();
         }
-        static void AdicionarEquipas()
-        {
-            Console.Clear();
-            Console.WriteLine("Escolha o nome para a equipa");
-            string nome = Console.ReadLine();
-
-            int id;
-            if (equipas.Count == 0)
-            {
-                id = 1;
-            }
-            else
-            {
-                id = equipas[equipas.Count - 1].id + 1;
-            }
-            
-
-            Equipa equipa = new Equipa()
-            {
-                id = id,
-                nome = nome,
-                staff = new List<Staff>(),
-                rider = new List<Rider>(),
-                cavalos = new List<Cavalo>(),
-                galros = new List<Galro>(),
-            };
-
-            equipas.Add(equipa);
-
-            Console.WriteLine("Equipa criada com sucesso.Prima enter para continuar");
-            Console.ReadKey();
-        }
+        /*static void RemoverPistas()
+      {
+          ListarPistas();
+          Console.WriteLine("Diga o id do cavalo que pretende eliminar");
+          int id = int.Parse(Console.ReadLine());
+          Pista SelectedPista = pistas.Find(e => e.id == id);
+          int index = pistas.FindIndex(pista => pista.id == id);
+          if (index == -1)
+          {
+              Console.WriteLine("Cavalo não foi encontrado. Prima enter para continuar");
+          }
+          else
+          {
+              pistas.RemoveAt(index);
+              Console.WriteLine("Equipa removida com sucesso.Prima enter para continuar");
+          }
+          Console.ReadKey();
+      }*/
         static void CarregarFicheiros()
         {
 
@@ -877,6 +885,9 @@ namespace ProjetoPOO
 
             string corridasJson = File.ReadAllText("corridas.json");
             corridas = JsonConvert.DeserializeObject<List<Corrida>>(corridasJson);
+
+            string gamesJson = File.ReadAllText("games.json");
+            games = JsonConvert.DeserializeObject<Game>(gamesJson);
 
 
 
@@ -904,6 +915,9 @@ namespace ProjetoPOO
 
             string corridasJson = JsonConvert.SerializeObject(corridas);
             File.WriteAllText("corridas.json", corridasJson);
+
+            string gamesJson = JsonConvert.SerializeObject(games);
+            File.WriteAllText("games.json", gamesJson);
 
         }
         static void FecharPrograma()
