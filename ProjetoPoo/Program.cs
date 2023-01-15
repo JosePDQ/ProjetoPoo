@@ -46,7 +46,7 @@ namespace ProjetoPOO
 
                 if (escolha == "1")
                 {
-                    AvancarDia(eventos);
+                    AvancarDia();
                     
                 }
                 else if (escolha == "2")
@@ -527,6 +527,9 @@ namespace ProjetoPOO
             Console.WriteLine("Diga o id do rider");
             int riderId = int.Parse(Console.ReadLine());
             Rider rider = riders.Find(s => s.id == riderId);
+           
+       
+            
 
             if (rider == null)
             {
@@ -565,6 +568,15 @@ namespace ProjetoPOO
             Cavalo cavalo = new Cavalo(id, nome, raca, velocidade, stamina, true, valor, rider);
 
             cavalos.Add(cavalo);
+            foreach (Equipa equipa in equipas)
+            {
+                Equipa equipaCavalo = equipas.Find(r => rider.id == riderId);
+                if (equipaCavalo != null)
+                {
+                    equipaCavalo.cavalos.Add(cavalo);
+                    break;
+                }
+            }
 
             Console.WriteLine("Cavalo adicionado com sucesso.Prima enter para continuar");
             Console.ReadKey();
@@ -643,6 +655,10 @@ namespace ProjetoPOO
                 {
                     Console.WriteLine($" - {membro.nome} - {membro.peso}KG");
                 }
+                foreach (Cavalo cavalo in equipa.cavalos)
+                {
+                    Console.WriteLine($" - {cavalo.nome}");
+                }
                 Console.WriteLine();Console.WriteLine();
             }
         }
@@ -670,7 +686,6 @@ namespace ProjetoPOO
                 staff = new List<Staff>(),
                 rider = new List<Rider>(),
                 cavalos = new List<Cavalo>(),
-                galros = new List<Galro>(),
             };
 
             equipas.Add(equipa);
@@ -1095,22 +1110,23 @@ namespace ProjetoPOO
         }
 
 
-        static void VerificaEvento(Evento evento)
+        static void VerificaEvento()
         {
-
-            if(games.DiaAtual == evento.data)
-            {
-                if(evento.tipoEvento == TipoEvento.Descanço)
+            foreach (Evento evento in eventos) { 
+                if (games.DiaAtual.dia == evento.data.dia && games.DiaAtual.mes == evento.data.mes && games.DiaAtual.ano == evento.data.ano)
                 {
-                    Descanco(evento);
-                }
-                if (evento.tipoEvento == TipoEvento.Treino)
-                {
-                    Treino(evento);
-                }
-                if (evento.tipoEvento == TipoEvento.Media)
-                {
-                    Media(evento);
+                    if (evento.tipoEvento == TipoEvento.Descanço)
+                    {
+                        Descanco(evento);
+                    }
+                    else if (evento.tipoEvento == TipoEvento.Treino)
+                    {
+                        Treino(evento);
+                    }
+                    else if (evento.tipoEvento == TipoEvento.Media)
+                    {
+                        Media(evento);
+                    }
                 }
             }
         }
@@ -1120,9 +1136,13 @@ namespace ProjetoPOO
         static void Descanco(Evento evento)
         {
             Equipa equi = equipas.Find(s => s.id == evento.teamId);
-            foreach(Cavalo c in equi.cavalos)
+            foreach (Cavalo c in equi.cavalos)
             {
-                c.stamina += 10;
+                if(c.stamina < 91) { 
+                    c.stamina += 10;
+                    cavalos.Find(r => r.id == c.id).stamina += 10;
+                }
+
             }
         }
         static void Treino(Evento evento)
@@ -1130,19 +1150,25 @@ namespace ProjetoPOO
             Equipa equi = equipas.Find(s => s.id == evento.teamId);
             foreach (Cavalo c in equi.cavalos)
             {
-                c.velocidade += 10;
+                c.velocidade += 2;
+                cavalos.Find(r => r.id == c.id).velocidade += 2;
+                
             }
+           
+
         }
         static void Media(Evento evento)
         {
             Equipa equi = equipas.Find(s => s.id == evento.teamId);
             foreach (Cavalo c in equi.cavalos)
             {
-                c.velocidade += 1000000;
+                c.valor += 10000;
+                cavalos.Find(r => r.id == c.id).valor += 10000;
+
             }
         }
 
-        static void AvancarDia(Evento evento)
+        static void AvancarDia()
         {
             games.DiaAtual.dia++;
             if (games.DiaAtual.dia > DateTime.DaysInMonth(games.DiaAtual.ano, games.DiaAtual.mes))
@@ -1155,7 +1181,7 @@ namespace ProjetoPOO
                     games.DiaAtual.ano++;
                 }
             }
-            VerificaEvento(evento);
+            VerificaEvento();
             
         }
 

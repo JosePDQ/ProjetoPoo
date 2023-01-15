@@ -10,7 +10,6 @@ public class Equipa
 	public List<Rider> rider { get; set; }
 
 	public List<Cavalo> cavalos { get; set; }
-	public List<Galro> galros { get; set; }
 
 
 
@@ -20,7 +19,6 @@ public class Equipa
 		staff = new List<Staff>();
 		rider = new List<Rider>();
 		cavalos = new List<Cavalo>();
-		galros = new List<Galro>();
 
 	}
 
@@ -31,7 +29,6 @@ public class Equipa
 		this.staff = Staff;
 		this.rider = Rider;
 		this.cavalos = Cavalos;
-		this.galros = Galros;
 	}
 
    
