@@ -11,6 +11,7 @@ public class Equipa
 
 	public List<Cavalo> cavalos { get; set; }
 
+	public int money { get; set; }
 
 
 
@@ -29,6 +30,7 @@ public class Equipa
 		this.staff = Staff;
 		this.rider = Rider;
 		this.cavalos = Cavalos;
+		this.money = 100000;
 	}
 
    

@@ -644,6 +644,7 @@ namespace ProjetoPOO
             {
                 Console.WriteLine($"Equipa id: {equipa.id}");
                 Console.WriteLine($"Nome de equipa: {equipa.nome}");
+                Console.WriteLine($"Nome de equipa: {equipa.money}");
                 Console.WriteLine("Staff: ");
 
                 foreach (Staff membro in equipa.staff)
@@ -1148,24 +1149,34 @@ namespace ProjetoPOO
         static void Treino(Evento evento)
         {
             Equipa equi = equipas.Find(s => s.id == evento.teamId);
-            foreach (Cavalo c in equi.cavalos)
+            if (equi.money <= 1000)
             {
-                c.velocidade += 2;
-                cavalos.Find(r => r.id == c.id).velocidade += 2;
-                
+                equi.money -= 1000;
+                foreach (Cavalo c in equi.cavalos)
+                {
+                    c.velocidade += 2;
+                    cavalos.Find(r => r.id == c.id).velocidade += 2;
+
+                }
             }
+            else Console.WriteLine("Saldo Insuficiente");
            
 
         }
         static void Media(Evento evento)
         {
             Equipa equi = equipas.Find(s => s.id == evento.teamId);
-            foreach (Cavalo c in equi.cavalos)
+            if (equi.money <= 1000)
             {
-                c.valor += 10000;
-                cavalos.Find(r => r.id == c.id).valor += 10000;
+                equi.money -= 1000;
+                foreach (Cavalo c in equi.cavalos)
+                {
+                    c.valor += 10000;
+                    cavalos.Find(r => r.id == c.id).valor += 10000;
 
+                }
             }
+            else Console.WriteLine("Saldo Insuficiente");
         }
 
         static void AvancarDia()
@@ -1185,6 +1196,37 @@ namespace ProjetoPOO
             
         }
 
+        static void Corrida()
+        {
+            int sm = 0;
+            int smt;
+            int vcd = 0;
+            foreach (Equipa equipa in equipas)
+            {
+                foreach(Cavalo cavalo in equipa.cavalos)
+                {
+                    
+                    smt = cavalo.stamina + cavalo.velocidade;
+                    if (smt > sm)
+                    {
+                        vcd = equipa.id;
+                    }
+
+                }
+            }
+            Console.WriteLine($"A quipa vencedora e: {vcd}");
+        }
+
+        static void VerificaCorrida()
+        {
+            foreach (Corrida corrida in corridas)
+            {
+                if (games.DiaAtual.dia == corrida.data.dia && games.DiaAtual.mes == corrida.data.mes && games.DiaAtual.ano == corrida.data.ano)
+                {
+                    Corrida();
+                }
+            }
+        }
 
         static void CarregarFicheiros()
         {
