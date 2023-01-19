@@ -7,6 +7,7 @@ using System.Text;
 using StaffSpace;
 using CorridasSpace;
 using EventosSpace;
+using System.Threading;
 
 namespace ProjetoPOO
 {
@@ -1157,7 +1158,7 @@ namespace ProjetoPOO
             {
                 if(c.stamina < 91) { 
                     c.stamina += 10;
-                    cavalos.Find(r => r.id == c.id).stamina += 10;
+                    cavalos.Find(r => r.id == c.id).stamina += 20;
                 }
 
             }
@@ -1172,6 +1173,8 @@ namespace ProjetoPOO
                 {
                     c.velocidade += 2;
                     cavalos.Find(r => r.id == c.id).velocidade += 2;
+                    cavalos.Find(r => r.id == c.id).stamina -= 10;
+
 
                 }
             }
@@ -1189,6 +1192,8 @@ namespace ProjetoPOO
                 {
                     c.valor += 10000;
                     cavalos.Find(r => r.id == c.id).valor += 10000;
+                    cavalos.Find(r => r.id == c.id).stamina -= 5;
+
 
                 }
             }
@@ -1218,38 +1223,62 @@ namespace ProjetoPOO
             double saveHigherScore = 0;
             int saveHorseId = 0;
             Random rnd = new Random();
-            foreach (Corrida corrida in corridas)
-            {
-                foreach(Cavalo cavalo in corrida.participantes)
-                {
-                    int random = rnd.Next(1, 50);
-                    if(corrida.tipo == TipoCorrida.Maratona)
-                    {
-                        double newScore = (cavalo.stamina / 100 * corrida.pista.comprimento * 0.4) + (cavalo.velocidade * 0.8) + (random * 0.2) - (cavalo.rider.peso * 0.1);
-                        if(newScore > saveHigherScore)
-                        {
-                            saveHigherScore = newScore;
-                            saveHorseId = cavalo.id;
-                        }
-                       
-                    }
-                    else if(corrida.tipo == TipoCorrida.Obstáculos)
-                    {
-                        double newScore = (cavalo.stamina / 100 * corrida.pista.comprimento * 0.25) + (cavalo.velocidade * 1.5) + (random * 0.2) - (cavalo.rider.peso * 0.1);
-                        if (newScore > saveHigherScore)
-                        {
-                            saveHigherScore = newScore;
-                            saveHorseId = cavalo.id;
-                        }
 
-                    }
-                    else if(corrida.tipo == TipoCorrida.Sprint)
+
+            List<int> horsePositions = new List<int>();
+            for (int i = 0; i < corridas[0].participantes.Count; i++)
+            {
+                horsePositions.Add(0);
+            }
+
+            for (int time = 0; time < 20; time++)
+            {
+                for (int i = 0; i < corridas[0].participantes.Count; i++)
+                {
+
+                    horsePositions[i] += corridas[0].participantes[i].velocidade;
+
+                    Console.Clear();
+                    for (int j = 0; j < horsePositions.Count; j++)
                     {
-                        double newScore = (cavalo.stamina / 100 * corrida.pista.comprimento * 0.1) + (cavalo.velocidade * 2) + (random * 0.2) - (cavalo.rider.peso * 0.1);
+                        int previousPosition = horsePositions[j];
+                        if (horsePositions[j] >= 0 && horsePositions[j] < Console.BufferWidth)
+                        {
+                            Console.SetCursorPosition(previousPosition, j);
+                            Console.Write(" ");
+                            horsePositions[j] += corridas[0].participantes[j].velocidade;
+                        }
+                        int position = horsePositions[j] % Console.BufferWidth;
+                        Console.SetCursorPosition(position, j);
+                        Console.Write(corridas[0].participantes[j].nome);
+                    }
+
+                    int random = rnd.Next(1, 50);
+                    if (corridas[0].tipo == TipoCorrida.Maratona)
+                    {
+                        double newScore = (corridas[0].participantes[i].stamina / 100 * corridas[0].pista.comprimento * 0.4) + (corridas[0].participantes[i].velocidade * 0.8) + (random * 0.2) - (corridas[0].participantes[i].rider.peso * 0.1);
                         if (newScore > saveHigherScore)
                         {
                             saveHigherScore = newScore;
-                            saveHorseId = cavalo.id;
+                            saveHorseId = corridas[0].participantes[i].id;
+                        }
+                    }
+                    else if (corridas[0].tipo == TipoCorrida.Obstáculos)
+                    {
+                        double newScore = (corridas[0].participantes[i].stamina / 100 * corridas[0].pista.comprimento * 0.25) + (corridas[0].participantes[i].velocidade * 1.5) + (random * 0.2) - (corridas[0].participantes[i].rider.peso * 0.1);
+                        if (newScore > saveHigherScore)
+                        {
+                            saveHigherScore = newScore;
+                            saveHorseId = corridas[0].participantes[i].id;
+                        }
+                    }
+                    else if (corridas[0].tipo == TipoCorrida.Sprint)
+                    {
+                        double newScore = (corridas[0].participantes[i].stamina / 100 * corridas[0].pista.comprimento * 0.1) + (corridas[0].participantes[i].velocidade * 2) + (random * 0.2) - (corridas[0].participantes[i].rider.peso * 0.1);
+                        if (newScore > saveHigherScore)
+                        {
+                            saveHigherScore = newScore;
+                            saveHorseId = corridas[0].participantes[i].id;
                         }
                     }
                     else
@@ -1257,24 +1286,23 @@ namespace ProjetoPOO
                         Console.WriteLine("Error");
                     }
 
-
-
+                    Thread.Sleep(300);
                 }
             }
             Cavalo winner = cavalos.Find(r => r.id == saveHorseId);
-
             foreach (Equipa equipa in equipas)
             {
                 foreach (Cavalo cavalo in equipa.cavalos)
                 {
-                    if(cavalo.id == winner.id)
+                    if (cavalo.id == winner.id)
                     {
                         Equipa WinnerTeam = equipa;
                         WinnerTeam.money += 25000;
                     }
-
                 }
             }
+
+            // Find the winner and print the winner name
 
             Console.Clear();
             Console.WriteLine("O cavalo vencedor da corrida é " + winner.nome);
