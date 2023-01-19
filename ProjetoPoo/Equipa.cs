@@ -11,7 +11,7 @@ public class Equipa
 
 	public List<Cavalo> cavalos { get; set; }
 
-	public int money { get; set; }
+	public float money { get; set; }
 
 
 
@@ -20,17 +20,18 @@ public class Equipa
 		staff = new List<Staff>();
 		rider = new List<Rider>();
 		cavalos = new List<Cavalo>();
+		this.money = 10000;
 
 	}
 
-	public Equipa(int Id, string Nome, List<Staff> Staff, List<Rider> Rider, List<Cavalo> Cavalos, List<Galro> Galros)
+	public Equipa(int Id, string Nome, List<Staff> Staff, List<Rider> Rider, List<Cavalo> Cavalos, float money)
 	{
 		this.id = Id;
 		this.nome = Nome;
 		this.staff = Staff;
 		this.rider = Rider;
 		this.cavalos = Cavalos;
-		this.money = 100000;
+		this.money = 10000;
 	}
 
    

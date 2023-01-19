@@ -6,8 +6,8 @@ public class Cavalo : Animal
 {
 	public Rider rider;
 
-    
 
+ 
     public Cavalo(int id,string nome, string raca, int velocidade, int stamina, bool saude, float valor,Rider rider) : base(id,nome,raca,velocidade,stamina,saude,valor)
 	{
         this.id = id;

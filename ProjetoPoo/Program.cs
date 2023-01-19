@@ -22,16 +22,16 @@ namespace ProjetoPOO
         static List<Evento> eventos = new List<Evento>();
 
         static Game games = new Game();
-       
         static void Main(string[] args)
         {
-
+          
             CarregarFicheiros();
-
+            
             while (true)
             {
 
                 Console.Clear();
+
                 Console.WriteLine("Main Menu:");
                 Console.WriteLine("Dia Atual: " + games.DiaAtual.dia + "/" + games.DiaAtual.mes + "/" + games.DiaAtual.ano);
                 Console.WriteLine("1 - Avançar 1 dia");
@@ -82,6 +82,7 @@ namespace ProjetoPOO
         }
         static void MenuAdmin()
         {
+
             while (true)
             {
 
@@ -508,13 +509,13 @@ namespace ProjetoPOO
             int existeRiders = 0;
             foreach (Rider rided in riders)
             {
-               
+
                 if (rided.trabalha == true)
                 {
-                   existeRiders = 1;
-                   Console.WriteLine($"{rided.id}\t{rided.nome}\t{rided.peso}");
+                    existeRiders = 1;
+                    Console.WriteLine($"{rided.id}\t{rided.nome}\t{rided.peso}");
                 }
-                
+
             }
             if (existeRiders == 0)
             {
@@ -527,9 +528,9 @@ namespace ProjetoPOO
             Console.WriteLine("Diga o id do rider");
             int riderId = int.Parse(Console.ReadLine());
             Rider rider = riders.Find(s => s.id == riderId);
-           
-       
-            
+
+
+
 
             if (rider == null)
             {
@@ -545,32 +546,44 @@ namespace ProjetoPOO
                     temCavalo++;
                 }
             }
-            
+
             if (temCavalo > 0)
             {
                 Console.WriteLine("O rider selecionado já tem um cavalo e não pode ser associado a outro");
                 Console.ReadKey();
                 return;
             }
-            
+
 
 
             int id;
-             if (cavalos.Count == 0)
-             {
-                 id = 1;
-             }
-             else
-             {
-                 id = cavalos[cavalos.Count - 1].id + 1;
-             }
+            if (cavalos.Count == 0)
+            {
+                id = 1;
+            }
+            else
+            {
+                id = cavalos[cavalos.Count - 1].id + 1;
+            }
 
             Cavalo cavalo = new Cavalo(id, nome, raca, velocidade, stamina, true, valor, rider);
-
+            var equipaID = 0;
             cavalos.Add(cavalo);
             foreach (Equipa equipa in equipas)
             {
-                Equipa equipaCavalo = equipas.Find(r => rider.id == riderId);
+                foreach (Rider membro in equipa.rider)
+                {
+                    if (membro.id == riderId)
+                    {
+                        equipaID = equipa.id;
+                        break;
+                    }
+                }
+            }
+
+            foreach (Equipa equipa in equipas)
+            {
+                Equipa equipaCavalo = equipas.Find(e => e.id == equipaID);
                 if (equipaCavalo != null)
                 {
                     equipaCavalo.cavalos.Add(cavalo);
@@ -608,6 +621,7 @@ namespace ProjetoPOO
                 Console.WriteLine($"{cavalo.id}\t{cavalo.nome}\t{cavalo.raca}\t{cavalo.velocidade}\t{cavalo.stamina}\t{cavalo.saude}\t{cavalo.valor}\t Rider:{cavalo.rider.nome}");
             }
             Console.ReadKey();
+            return;
         }
        /*static void RemoverEquipas()
         {
@@ -644,7 +658,7 @@ namespace ProjetoPOO
             {
                 Console.WriteLine($"Equipa id: {equipa.id}");
                 Console.WriteLine($"Nome de equipa: {equipa.nome}");
-                Console.WriteLine($"Nome de equipa: {equipa.money}");
+                Console.WriteLine($"Dinheiro da equipa: {equipa.money}");
                 Console.WriteLine("Staff: ");
 
                 foreach (Staff membro in equipa.staff)
@@ -658,7 +672,7 @@ namespace ProjetoPOO
                 }
                 foreach (Cavalo cavalo in equipa.cavalos)
                 {
-                    Console.WriteLine($" - {cavalo.nome}");
+                    Console.WriteLine($" - Cavalo: {cavalo.nome}");
                 }
                 Console.WriteLine();Console.WriteLine();
             }
@@ -687,6 +701,7 @@ namespace ProjetoPOO
                 staff = new List<Staff>(),
                 rider = new List<Rider>(),
                 cavalos = new List<Cavalo>(),
+                money = 10000
             };
 
             equipas.Add(equipa);
@@ -964,8 +979,9 @@ namespace ProjetoPOO
             if (pista == null)
             {
                 Console.WriteLine("Pista não existe");
-                return;
+               
                 Console.ReadKey();
+                return;
             }
 
             Console.WriteLine("Diga a data da corrida (dd-mm-yyyy): ");
@@ -1149,7 +1165,7 @@ namespace ProjetoPOO
         static void Treino(Evento evento)
         {
             Equipa equi = equipas.Find(s => s.id == evento.teamId);
-            if (equi.money <= 1000)
+            if (equi.money >= 1000)
             {
                 equi.money -= 1000;
                 foreach (Cavalo c in equi.cavalos)
@@ -1166,7 +1182,7 @@ namespace ProjetoPOO
         static void Media(Evento evento)
         {
             Equipa equi = equipas.Find(s => s.id == evento.teamId);
-            if (equi.money <= 1000)
+            if (equi.money >= 1000)
             {
                 equi.money -= 1000;
                 foreach (Cavalo c in equi.cavalos)
@@ -1193,28 +1209,77 @@ namespace ProjetoPOO
                 }
             }
             VerificaEvento();
+            VerificaCorrida();
             
         }
 
         static void Corrida()
         {
-            int sm = 0;
-            int smt;
-            int vcd = 0;
+            double saveHigherScore = 0;
+            int saveHorseId = 0;
+            Random rnd = new Random();
+            foreach (Corrida corrida in corridas)
+            {
+                foreach(Cavalo cavalo in corrida.participantes)
+                {
+                    int random = rnd.Next(1, 50);
+                    if(corrida.tipo == TipoCorrida.Maratona)
+                    {
+                        double newScore = (cavalo.stamina / 100 * corrida.pista.comprimento * 0.4) + (cavalo.velocidade * 0.8) + (random * 0.2) - (cavalo.rider.peso * 0.1);
+                        if(newScore > saveHigherScore)
+                        {
+                            saveHigherScore = newScore;
+                            saveHorseId = cavalo.id;
+                        }
+                       
+                    }
+                    else if(corrida.tipo == TipoCorrida.Obstáculos)
+                    {
+                        double newScore = (cavalo.stamina / 100 * corrida.pista.comprimento * 0.25) + (cavalo.velocidade * 1.5) + (random * 0.2) - (cavalo.rider.peso * 0.1);
+                        if (newScore > saveHigherScore)
+                        {
+                            saveHigherScore = newScore;
+                            saveHorseId = cavalo.id;
+                        }
+
+                    }
+                    else if(corrida.tipo == TipoCorrida.Sprint)
+                    {
+                        double newScore = (cavalo.stamina / 100 * corrida.pista.comprimento * 0.1) + (cavalo.velocidade * 2) + (random * 0.2) - (cavalo.rider.peso * 0.1);
+                        if (newScore > saveHigherScore)
+                        {
+                            saveHigherScore = newScore;
+                            saveHorseId = cavalo.id;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Error");
+                    }
+
+
+
+                }
+            }
+            Cavalo winner = cavalos.Find(r => r.id == saveHorseId);
+
             foreach (Equipa equipa in equipas)
             {
-                foreach(Cavalo cavalo in equipa.cavalos)
+                foreach (Cavalo cavalo in equipa.cavalos)
                 {
-                    
-                    smt = cavalo.stamina + cavalo.velocidade;
-                    if (smt > sm)
+                    if(cavalo.id == winner.id)
                     {
-                        vcd = equipa.id;
+                        Equipa WinnerTeam = equipa;
+                        WinnerTeam.money += 25000;
                     }
 
                 }
             }
-            Console.WriteLine($"A quipa vencedora e: {vcd}");
+
+            Console.Clear();
+            Console.WriteLine("O cavalo vencedor da corrida é " + winner.nome);
+            Console.ReadKey();
+            return;
         }
 
         static void VerificaCorrida()
