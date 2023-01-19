@@ -15,7 +15,6 @@ namespace ProjetoPOO
     {
         static List<Equipa> equipas = new List<Equipa>();
         static List<Cavalo> cavalos = new List<Cavalo>();
-        static List<Galro> galros = new List<Galro>();
         static List<Pista> pistas = new List<Pista>();
         static List<Staff> staffs = new List<Staff>();
         static List<Rider> riders = new List<Rider>();
@@ -40,7 +39,8 @@ namespace ProjetoPOO
                 Console.WriteLine("3 - Listar Eventos");
                 Console.WriteLine("4 - Adicionar Corridas");
                 Console.WriteLine("5 - Listar Corridas");
-                Console.WriteLine("6 - Admin Menu");
+                Console.WriteLine("6 - Comprar Cavalos");
+                Console.WriteLine("7 - Admin Menu");
                 Console.WriteLine("0 - Fechar Programa");
                 Console.Write("Escolha uma opção: ");
                 string escolha = Console.ReadLine();
@@ -67,6 +67,10 @@ namespace ProjetoPOO
                     ListarCorridas();
                 }
                 else if (escolha == "6")
+                {
+                    CompraCavalos();
+                }
+                else if (escolha == "7")
                 {
                     MenuAdmin();
                 }
@@ -609,7 +613,7 @@ namespace ProjetoPOO
             else
             {
                 cavalos.RemoveAt(index);
-                Console.WriteLine("Equipa removida com sucesso.Prima enter para continuar");
+                Console.WriteLine("Cavalo removido com sucesso.Prima enter para continuar");
             }
             Console.ReadKey();
         }
@@ -1309,6 +1313,91 @@ namespace ProjetoPOO
             Console.ReadKey();
             return;
         }
+        static void CompraCavalos()
+        {
+            Console.Clear();
+            Console.WriteLine("Qual é o id da tua equipa");
+            int teamId = int.Parse(Console.ReadLine());
+
+            Equipa equipa = equipas.FirstOrDefault(t => t.id == teamId);
+            if (equipa == null)
+            {
+                Console.WriteLine("Não tem equipa com esse id");
+                Console.ReadKey();
+                return;
+            }
+
+            foreach (Equipa equipaList in equipas) {
+                if (equipaList.id == teamId)
+                {
+                    foreach (Rider rider in equipaList.rider)
+                    {
+                        Console.WriteLine($"{rider.id}\t{rider.nome}\t{rider.peso}KG");
+                    }
+                }
+            }
+            Console.WriteLine("Qual é o id do rider que pretende atribuir o cavalo");
+            int riderID = int.Parse(Console.ReadLine());
+            Rider newRider = riders.FirstOrDefault(t => t.id == riderID);
+
+            ListarCavalos();
+            
+            Console.WriteLine("Qual é o id do cavalo que pretende comprar");
+            int compraID = int.Parse(Console.ReadLine());
+
+            Cavalo cavalo = cavalos.FirstOrDefault(t => t.id == compraID);
+            if (cavalo == null)
+            {
+                Console.WriteLine("Não tem cavalo com esse id");
+                Console.ReadKey();
+                return;
+            }
+            else
+            {
+                if (equipa.money >= cavalo.valor)
+                {
+                    Cavalo horseToRemove = null;
+                    cavalo.rider = newRider;
+                    int oldTeamID = -1;
+                    foreach(Equipa horseTeam in equipas)
+                    {
+                        horseToRemove = horseTeam.cavalos.Find(h => h.id == cavalo.id);
+                        foreach (Cavalo allHorses in horseTeam.cavalos) 
+                        {
+                            if (allHorses.id == compraID)
+                            {
+                                oldTeamID = horseTeam.id;
+                                break;
+                            }
+                        }
+                    }
+                   
+                    if(oldTeamID != -1)
+                    {
+                        Equipa oldTeam = equipas.FirstOrDefault(t => t.id == oldTeamID);
+                        oldTeam.cavalos.Remove(horseToRemove);
+                        equipa.money -= cavalo.valor;
+                        oldTeam.money += cavalo.valor;
+
+                    }
+                    equipa.cavalos.Add(cavalo);
+                    Console.WriteLine("Compraste o cavalo com sucesso");
+                    
+                }
+                else
+                {
+                    Console.WriteLine("Não tens dinheiro suficiente para comprar o cavalo.");
+                }
+
+            }
+
+
+
+
+            Console.ReadKey();
+            return;
+
+        }
 
         static void VerificaCorrida()
         {
@@ -1320,7 +1409,6 @@ namespace ProjetoPOO
                 }
             }
         }
-
         static void CarregarFicheiros()
         {
 
@@ -1329,9 +1417,6 @@ namespace ProjetoPOO
 
             string cavalosJson = File.ReadAllText("cavalos.json");
             cavalos = JsonConvert.DeserializeObject<List<Cavalo>>(cavalosJson);
-
-            string galrosJson = File.ReadAllText("galros.json");
-            galros = JsonConvert.DeserializeObject<List<Galro>>(galrosJson);
 
             string pistasJson = File.ReadAllText("pistas.json");
             pistas = JsonConvert.DeserializeObject<List<Pista>>(pistasJson);
@@ -1362,9 +1447,6 @@ namespace ProjetoPOO
 
             string cavalosJson = JsonConvert.SerializeObject(cavalos);
             File.WriteAllText("cavalos.json", cavalosJson);
-
-            string galrosJson = JsonConvert.SerializeObject(galros);
-            File.WriteAllText("galros.json", galrosJson);
 
             string pistasJson = JsonConvert.SerializeObject(pistas);
             File.WriteAllText("pistas.json", pistasJson);
