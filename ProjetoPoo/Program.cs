@@ -95,9 +95,8 @@ namespace ProjetoPOO
                 Console.WriteLine("Admin Menu:");
                 Console.WriteLine("1 - Equipas");
                 Console.WriteLine("2 - Animais");
-                Console.WriteLine("3 - Corridas");
-                Console.WriteLine("4 - Pessoas");
-                Console.WriteLine("5 - Pistas");
+                Console.WriteLine("3 - Pessoas");
+                Console.WriteLine("4 - Pistas");
                 Console.WriteLine("0 - Voltar atrás");
                 Console.Write("Escolha uma opção: ");
                 string escolha = Console.ReadLine();
@@ -112,13 +111,9 @@ namespace ProjetoPOO
                 }
                 else if (escolha == "3")
                 {
-                    MenuCorridas();
-                }
-                else if (escolha == "4")
-                {
                     MenuPessoas();
                 }
-                else if (escolha == "5")
+                else if (escolha == "4")
                 {
                     MenuPistas();
                 }
@@ -141,7 +136,7 @@ namespace ProjetoPOO
                 Console.Clear();
                 Console.WriteLine("Menu de Equipas:");
                 Console.WriteLine("1 - Adicione uma equipa");
-                Console.WriteLine("2 - Remover uma equipa");
+                Console.WriteLine("2 - Removido");
                 Console.WriteLine("3 - Ver todas as equipas");
                 Console.WriteLine("4 - Adicionar staff para as equipas");
                 Console.WriteLine("5 - Adicionar rider para as equipas");
@@ -197,7 +192,7 @@ namespace ProjetoPOO
                 Console.Clear();
                 Console.WriteLine("Menu de animais:");
                 Console.WriteLine("1 - Adicionar um cavalo");
-                Console.WriteLine("2 - Remover um cavalo");
+                Console.WriteLine("2 - Removido");
                 Console.WriteLine("3 - Ver todos os animais");
                 Console.WriteLine("0 - Voltar ao main menu");
                 Console.Write("Escolha uma opção: ");
@@ -210,7 +205,7 @@ namespace ProjetoPOO
                 }
                 else if (escolha == "2")
                 {
-                    RemoverCavalos();
+                   // RemoverCavalos();
                     break;
                 }
                 else if (escolha == "3")
@@ -229,41 +224,7 @@ namespace ProjetoPOO
                 }
             }
         }
-        static void MenuCorridas()
-        {
-            while (true)
-            {
-                Console.Clear();
-                Console.WriteLine("Menu de corridas:");
-                Console.WriteLine("1 - Adicionar uma corrida");
-                Console.WriteLine("2 - Remover uma corrida");
-                Console.WriteLine("3 - Ver todas as corridas");
-                Console.WriteLine("0 - Voltar ao main menu");
-                Console.Write("Escolha uma opção: ");
-                string escolha = Console.ReadLine();
-
-                if (escolha == "1")
-                {
-                }
-                else if (escolha == "2")
-                {
-                   
-                }
-                else if (escolha == "3")
-                {
-                    
-                }
-                else if (escolha == "0")
-                {
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine("Escolha inválida. Prime Enter para tentar novamente.");
-                    Console.ReadKey();
-                }
-            }
-        }
+       
         static void MenuPessoas()
         {
             while (true)
@@ -272,7 +233,7 @@ namespace ProjetoPOO
                 Console.WriteLine("Menu de Pessoas:");
                 Console.WriteLine("1 - Adicionar um rider");
                 Console.WriteLine("2 - Adicionar staff");
-                Console.WriteLine("3 - Remover uma pessoa");
+                Console.WriteLine("3 - Removido");
                 Console.WriteLine("4 - Ver todas as pessoas");
                 Console.WriteLine("0 - Voltar ao main menu");
                 Console.Write("Escolha uma opção: ");
@@ -290,7 +251,7 @@ namespace ProjetoPOO
                 }
                 else if (escolha == "3")
                 {
-                    RemoverPessoas();
+                    //RemoverPessoas();
                     break;
                 }
                 else if (escolha == "4")
@@ -372,7 +333,7 @@ namespace ProjetoPOO
             Console.WriteLine("Prima Enter para tentar novamente.");
             Console.ReadKey();
         }
-        static void RemoverPessoas()
+        /*static void RemoverPessoas()
         {
             Console.Clear();
             Console.WriteLine("Que tipo de pessoas pretende remover? (staff, rider)");
@@ -423,7 +384,7 @@ namespace ProjetoPOO
             }
 
 
-        }
+        }*/
         static void AdicionarRiders()
         {
             Console.Clear();
@@ -599,7 +560,7 @@ namespace ProjetoPOO
             Console.WriteLine("Cavalo adicionado com sucesso.Prima enter para continuar");
             Console.ReadKey();
         }
-        static void RemoverCavalos()
+        /*static void RemoverCavalos()
         {
             ListarCavalos();
             Console.WriteLine("Diga o id do cavalo que pretende eliminar");
@@ -627,7 +588,7 @@ namespace ProjetoPOO
             }
             Console.ReadKey();
             return;
-        }
+        }*/
        /*static void RemoverEquipas()
         {
             ListarEquipas();
