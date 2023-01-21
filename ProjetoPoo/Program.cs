@@ -224,7 +224,6 @@ namespace ProjetoPOO
                 }
             }
         }
-       
         static void MenuPessoas()
         {
             while (true)
@@ -312,18 +311,18 @@ namespace ProjetoPOO
         static void ListarStaffs()
         {
             Console.Clear();
-            Console.WriteLine("Membros Staff");
+            Console.WriteLine("Membros Staff:");
             foreach (Staff staff in staffs)
             {
-                Console.WriteLine($"{staff.id}\t{staff.nome}\t{staff.funcao}");
+                Console.WriteLine($"{staff.id}\t{staff.nome}\t{staff.funcao}\t{staff.salarioDiario}€");
             }
         }
         static void ListarRiders()
         {
-            Console.WriteLine("Riders");
+            Console.WriteLine("Riders:");
             foreach (Rider rider in riders)
             {
-                Console.WriteLine($"{rider.id}\t{rider.nome}\t{rider.peso}KG");
+                Console.WriteLine($"{rider.id}\t{rider.nome}\t{rider.peso}KG\t{rider.salarioDiario}€");
             }
         }
         static void ListarPessoas()
@@ -392,7 +391,7 @@ namespace ProjetoPOO
             string nome = Console.ReadLine();
             Console.WriteLine("Diga o peso do rider");
             float peso = float.Parse(Console.ReadLine());
-
+            int salario = 50;
 
             int id;
             if (riders.Count == 0)
@@ -405,7 +404,7 @@ namespace ProjetoPOO
             }
 
 
-            Rider riderNew = new Rider(id, nome, false,peso);
+            Rider riderNew = new Rider(id, nome, false,salario,peso);
             riders.Add(riderNew);
 
             Console.WriteLine("Rider adicionado com sucesso.Prima enter para continuar");
@@ -449,9 +448,9 @@ namespace ProjetoPOO
             {
                 id = staffs[staffs.Count - 1].id + 1;
             }
+            int salario = 50;
 
-
-            Staff staffNew = new Staff(id, nome,false, funcao);
+            Staff staffNew = new Staff(id, nome,false,salario, funcao);
             staffs.Add(staffNew);
 
             Console.WriteLine("Staff adicionado com sucesso.Prima enter para continuar");
@@ -577,7 +576,7 @@ namespace ProjetoPOO
                 Console.WriteLine("Cavalo removido com sucesso.Prima enter para continuar");
             }
             Console.ReadKey();
-        }
+        }*/
         static void ListarCavalos()
         {
             Console.Clear();
@@ -588,7 +587,7 @@ namespace ProjetoPOO
             }
             Console.ReadKey();
             return;
-        }*/
+        }
        /*static void RemoverEquipas()
         {
             ListarEquipas();
@@ -878,7 +877,7 @@ namespace ProjetoPOO
             Console.WriteLine("Pistas");
             foreach (Pista pista in pistas)
             {
-                Console.WriteLine($"{pista.id}\t{pista.nome}\t{pista.comprimento}m");
+                Console.WriteLine($"\t{pista.id}\t{pista.nome}\t{pista.comprimento}m");
             }
             Console.ReadKey();
         }
@@ -1022,7 +1021,6 @@ namespace ProjetoPOO
             }
             Console.ReadKey();
         }
-
         static void AdicionarEventos()
         {
             Console.Clear();
@@ -1091,8 +1089,6 @@ namespace ProjetoPOO
             }
             Console.ReadKey();
         }
-
-
         static void VerificaEvento()
         {
             foreach (Evento evento in eventos) { 
@@ -1113,9 +1109,6 @@ namespace ProjetoPOO
                 }
             }
         }
-
-
-        
         static void Descanco(Evento evento)
         {
             Equipa equi = equipas.Find(s => s.id == evento.teamId);
@@ -1164,7 +1157,6 @@ namespace ProjetoPOO
             }
             else Console.WriteLine("Saldo Insuficiente");
         }
-
         static void AvancarDia()
         {
             games.DiaAtual.dia++;
@@ -1178,11 +1170,24 @@ namespace ProjetoPOO
                     games.DiaAtual.ano++;
                 }
             }
+
+            foreach (Equipa equipa in equipas)
+            {
+                float salarioTotal = 0;
+                foreach(Rider rider in equipa.rider)
+                {
+                    salarioTotal+= rider.salarioDiario;
+                }
+                foreach(Staff staff in equipa.staff)
+                {
+                    salarioTotal+=staff.salarioDiario;
+                }
+                equipa.money-= salarioTotal;
+            }
             VerificaEvento();
             VerificaCorrida();
             
         }
-
         static void Corrida()
         {
             double saveHigherScore = 0;
@@ -1251,7 +1256,7 @@ namespace ProjetoPOO
                         Console.WriteLine("Error");
                     }
 
-                    Thread.Sleep(300);
+                    Thread.Sleep(500);
                 }
             }
             Cavalo winner = cavalos.Find(r => r.id == saveHorseId);
@@ -1262,7 +1267,7 @@ namespace ProjetoPOO
                     if (cavalo.id == winner.id)
                     {
                         Equipa WinnerTeam = equipa;
-                        WinnerTeam.money += 25000;
+                        WinnerTeam.money += 15000;
                     }
                 }
             }
@@ -1359,7 +1364,6 @@ namespace ProjetoPOO
             return;
 
         }
-
         static void VerificaCorrida()
         {
             foreach (Corrida corrida in corridas)
@@ -1433,7 +1437,5 @@ namespace ProjetoPOO
             SalvarFicheiros();
             Environment.Exit(0);
         }
-
-     
     }
 }

@@ -9,11 +9,12 @@ public class Rider : Pessoa
 
     
 
-        public Rider(int id, string nome,bool trabalha,float peso) : base(id, nome,trabalha)
+        public Rider(int id, string nome,bool trabalha,float salarioDiario, float peso) : base(id, nome,trabalha, salarioDiario)
         {
             this.id = id;
             this.nome = nome;
             this.trabalha = trabalha;
+            this.salarioDiario = salarioDiario;
             this.peso = peso;
         }
     }
